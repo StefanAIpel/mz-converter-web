@@ -8,6 +8,7 @@ const state = {
   session: null,
   profile: null,
   lastDownload: null,
+  urlAccessToken: null,
 };
 
 const $ = (id) => document.getElementById(id);
@@ -60,6 +61,10 @@ function bindEvents() {
 }
 
 async function refreshActiveSession() {
+  if (state.urlAccessToken && state.session?.user) {
+    return state.session;
+  }
+
   const { data: { session } } = await sb.auth.getSession();
   if (!session) {
     state.session = null;
@@ -77,6 +82,22 @@ async function refreshActiveSession() {
   } catch (_error) {
     state.session = session;
     return session;
+  }
+}
+
+async function tryHubTokenSession(token) {
+  try {
+    const { data, error } = await sb.auth.getUser(token);
+    if (error || !data.user) {
+      return null;
+    }
+    state.urlAccessToken = token;
+    return {
+      access_token: token,
+      user: data.user,
+    };
+  } catch (_error) {
+    return null;
   }
 }
 
@@ -116,20 +137,10 @@ async function registerServiceWorker() {
 }
 
 async function restoreSession() {
-  // SSO: check ?auth_token= van Hub
   const params = new URLSearchParams(location.search);
   const urlToken = params.get('auth_token');
   if (urlToken) {
-    try {
-      const { data, error } = await sb.auth.setSession({
-        access_token: urlToken,
-        refresh_token: urlToken,
-      });
-      if (!error && data.session) {
-        state.session = data.session;
-      }
-    } catch (_) { /* ignore, fall through to normal session check */ }
-    // Strip token uit URL
+    state.session = await tryHubTokenSession(urlToken);
     params.delete('auth_token');
     const clean = params.toString();
     history.replaceState(null, '', location.pathname + (clean ? '?' + clean : '') + location.hash);
@@ -146,10 +157,12 @@ async function restoreSession() {
 
   sb.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session) {
+      state.urlAccessToken = null;
       state.session = session;
       await loadProfile();
       showApp();
     } else if (event === 'SIGNED_OUT') {
+      state.urlAccessToken = null;
       state.session = null;
       state.profile = null;
       state.lastDownload = null;
@@ -220,6 +233,7 @@ async function onForgotPassword() {
 }
 
 async function onLogout() {
+  state.urlAccessToken = null;
   await sb.auth.signOut();
 }
 
