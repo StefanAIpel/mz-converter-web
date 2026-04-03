@@ -91,7 +91,7 @@ async function loadProfile() {
 
 async function checkApiHealth() {
   try {
-    const resp = await fetch(`${API_BASE_URL}/api/health`);
+    const resp = await fetch(`${API_BASE_URL}/health`);
     if (!resp.ok) throw new Error(`API gaf ${resp.status}`);
     serviceBadge.textContent = 'API live';
     serviceBadge.className = 'service-badge ok';
@@ -176,7 +176,7 @@ async function onConvert(event) {
   formStatus.textContent = 'Upload en conversie gestart...';
 
   try {
-    const response = await fetch(`${API_BASE_URL}/api/convert`, {
+    const response = await fetch(`${API_BASE_URL}/convert`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
