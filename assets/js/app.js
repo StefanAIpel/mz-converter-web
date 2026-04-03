@@ -27,6 +27,7 @@ const submitBtn = $('submit-btn');
 const formStatus = $('form-status');
 const serviceBadge = $('service-badge');
 const apiUrl = $('api-url');
+const installBtn = $('install-btn');
 const fileInput = $('mz-file');
 const fileName = $('file-name');
 const afleverCheckbox = convertForm.elements.aflever_zelfde;
@@ -34,12 +35,15 @@ const afleverField = $('aflever-field');
 const downloadCard = $('download-card');
 const downloadName = $('download-name');
 const downloadBtn = $('download-btn');
+let deferredInstallPrompt = null;
 
 init();
 
 async function init() {
-  apiUrl.textContent = `Render API: ${API_BASE_URL}`;
+  apiUrl.textContent = 'Render API live via beveiligde proxy.';
   bindEvents();
+  setupPwaInstall();
+  registerServiceWorker();
   await Promise.all([checkApiHealth(), restoreSession()]);
 }
 
@@ -51,7 +55,43 @@ function bindEvents() {
   fileInput.addEventListener('change', onFileChange);
   afleverCheckbox.addEventListener('change', toggleDeliveryField);
   downloadBtn.addEventListener('click', downloadLastFile);
+  installBtn.addEventListener('click', onInstallClick);
   toggleDeliveryField();
+}
+
+function setupPwaInstall() {
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    installBtn.classList.remove('hidden');
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    installBtn.classList.add('hidden');
+  });
+
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  if (standalone) {
+    installBtn.classList.add('hidden');
+  }
+}
+
+async function onInstallClick() {
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  installBtn.classList.add('hidden');
+}
+
+async function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+  try {
+    await navigator.serviceWorker.register('/sw.js');
+  } catch (error) {
+    console.warn('Service worker registration failed', error);
+  }
 }
 
 async function restoreSession() {
