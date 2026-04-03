@@ -72,16 +72,29 @@ async function refreshActiveSession() {
   }
 
   try {
-    const { data, error } = await sb.auth.refreshSession();
-    if (error || !data.session) {
+    const { data: currentUser, error: currentUserError } = await sb.auth.getUser(session.access_token);
+    if (!currentUserError && currentUser.user) {
       state.session = session;
       return session;
     }
+
+    const { data, error } = await sb.auth.refreshSession();
+    if (error || !data.session) {
+      await clearStaleSession();
+      return null;
+    }
+
+    const { data: refreshedUser, error: refreshedUserError } = await sb.auth.getUser(data.session.access_token);
+    if (refreshedUserError || !refreshedUser.user) {
+      await clearStaleSession();
+      return null;
+    }
+
     state.session = data.session;
     return data.session;
   } catch (_error) {
-    state.session = session;
-    return session;
+    await clearStaleSession();
+    return null;
   }
 }
 
@@ -98,6 +111,16 @@ async function tryHubTokenSession(token) {
     };
   } catch (_error) {
     return null;
+  }
+}
+
+async function clearStaleSession() {
+  state.urlAccessToken = null;
+  state.session = null;
+  try {
+    await sb.auth.signOut();
+  } catch (_error) {
+    // Ignore; local state reset is what matters here.
   }
 }
 
@@ -294,7 +317,15 @@ async function onConvert(event) {
     formStatus.textContent = 'Excel gereed. Bestand is gedownload.';
     formStatus.className = 'form-status success';
   } catch (err) {
-    formStatus.textContent = err.message || 'Conversie mislukt.';
+    const message = err.message || 'Conversie mislukt.';
+    if (message.includes('signing key') || message.includes('invalid_token')) {
+      await clearStaleSession();
+      showLogin();
+      formStatus.textContent = 'Sessie verlopen of verouderd. Open opnieuw via SLL Hub of log opnieuw in.';
+      formStatus.className = 'form-status error';
+      return;
+    }
+    formStatus.textContent = message;
     formStatus.className = 'form-status error';
   } finally {
     setButtonState(submitBtn, false, 'Converteer naar Excel');
