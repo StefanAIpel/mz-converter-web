@@ -73,7 +73,12 @@
 
         <form id="convert-form" class="convert-form">
           <section class="fieldset">
-            <h4>Bestand & Verkoper</h4>
+            <div class="section-head">
+              <div>
+                <h4>Bron & Verkoper</h4>
+                <p>Upload het leverancierbestand en leg de basis van de offerte vast.</p>
+              </div>
+            </div>
             <div class="grid two">
               <label class="field file-drop">
                 <span>Leverancier Excel</span>
@@ -81,7 +86,7 @@
                 <strong id="file-name">Selecteer `.xlsx` bestand</strong>
                 <small>Alleen Excel-input van leverancier</small>
               </label>
-              <div class="grid stack">
+              <div class="grid stack compact-stack">
                 <label class="field">
                   <span>Verkoper</span>
                   <input name="verkoper_naam" placeholder="Steven Zweegers" required />
@@ -90,31 +95,36 @@
                   <span>Offertenummer</span>
                   <input name="sll_ref" placeholder="SLL-2026-001" />
                 </label>
+                <div class="grid three compact-grid">
+                  <label class="field">
+                    <span>Korting %</span>
+                    <input name="klant_korting" type="number" min="0" max="80" step="0.5" value="0" required />
+                  </label>
+                  <label class="field">
+                    <span>Transport %</span>
+                    <input name="transport_opslag" type="number" min="0" max="50" step="0.5" value="10" required />
+                  </label>
+                  <label class="field">
+                    <span>Taal</span>
+                    <select name="lang">
+                      <option value="nl">Nederlands</option>
+                      <option value="en">English</option>
+                      <option value="fr">Français</option>
+                      <option value="de">Deutsch</option>
+                    </select>
+                  </label>
+                </div>
               </div>
-            </div>
-            <div class="grid three">
-              <label class="field">
-                <span>Korting %</span>
-                <input name="klant_korting" type="number" min="0" max="80" step="0.5" value="0" required />
-              </label>
-              <label class="field">
-                <span>Transport opslag %</span>
-                <input name="transport_opslag" type="number" min="0" max="50" step="0.5" value="10" required />
-              </label>
-              <label class="field">
-                <span>Taal</span>
-                <select name="lang">
-                  <option value="nl">Nederlands</option>
-                  <option value="en">English</option>
-                  <option value="fr">Français</option>
-                  <option value="de">Deutsch</option>
-                </select>
-              </label>
             </div>
           </section>
 
           <section class="fieldset">
-            <h4>Klant</h4>
+            <div class="section-head">
+              <div>
+                <h4>Klantgegevens</h4>
+                <p>Contact-, project- en adresgegevens voor de offerte en het voorblad.</p>
+              </div>
+            </div>
             <div class="grid three">
               <label class="field">
                 <span>Klantnaam</span>
@@ -145,16 +155,6 @@
             </div>
             <div class="grid two">
               <label class="field">
-                <span>Klantreferentie</span>
-                <input name="klant_referentie" placeholder="REF-001" />
-              </label>
-              <label class="field">
-                <span>Betaalconditie</span>
-                <input name="betaalconditie" placeholder="30 dagen" />
-              </label>
-            </div>
-            <div class="grid two">
-              <label class="field">
                 <span>E-mail</span>
                 <input name="klant_email" placeholder="klant@bedrijf.nl" />
               </label>
@@ -166,24 +166,49 @@
           </section>
 
           <section class="fieldset">
-            <h4>Levering</h4>
-            <div class="grid two">
+            <div class="section-head">
+              <div>
+                <h4>Condities</h4>
+                <p>Levering, betaling en vrije tekst voor klanttekst of interne opmerkingen.</p>
+              </div>
+            </div>
+            <div class="grid two compact-grid">
               <label class="field">
                 <span>Levertijd</span>
                 <input name="levertijd" placeholder="4-6 weken" />
               </label>
               <label class="field">
-                <span>Opmerking</span>
-                <input name="opmerking" placeholder="Interne opmerking of klanttekst" />
+                <span>Betaalconditie</span>
+                <input name="betaalconditie" placeholder="30 dagen" />
+              </label>
+            </div>
+            <div class="grid two compact-grid">
+              <label class="field">
+                <span>Klantreferentie</span>
+                <input name="klant_referentie" placeholder="REF-001" />
+              </label>
+              <label class="field">
+                <span>Offerte-opmerking kort</span>
+                <input name="opmerking_kort" placeholder="Bijv. projectfase of interne tag" />
               </label>
             </div>
             <label class="checkbox-row">
               <input type="checkbox" name="aflever_zelfde" value="1" checked />
               <span>Afleveradres gelijk aan factuuradres</span>
             </label>
-            <label class="field" id="aflever-field">
-              <span>Afleveradres</span>
-              <input name="afleveradres" placeholder="Industrieweg 10, 1234 AB Amsterdam" />
+            <div class="grid two compact-grid notes-grid">
+              <label class="field field-wide">
+                <span>Klanttekst / opmerking</span>
+                <textarea name="opmerking" rows="4" placeholder="Bijvoorbeeld leverafspraak, interne notitie of tekst voor de klant."></textarea>
+              </label>
+              <div class="condition-note">
+                <strong>Gebruik</strong>
+                <p>Deze sectie is bewust compact gehouden zodat er later extra condities, referenties of verkoopvelden bij kunnen zonder dat de pagina onrustig wordt.</p>
+              </div>
+            </div>
+            <label class="field hidden" id="aflever-field">
+              <span>Afleveradres afwijkend</span>
+              <input name="afleveradres" placeholder="Afwijkend afleveradres" />
             </label>
           </section>
 
