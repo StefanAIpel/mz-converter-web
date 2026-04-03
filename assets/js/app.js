@@ -59,6 +59,27 @@ function bindEvents() {
   toggleDeliveryField();
 }
 
+async function refreshActiveSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    state.session = null;
+    return null;
+  }
+
+  try {
+    const { data, error } = await sb.auth.refreshSession();
+    if (error || !data.session) {
+      state.session = session;
+      return session;
+    }
+    state.session = data.session;
+    return data.session;
+  } catch (_error) {
+    state.session = session;
+    return session;
+  }
+}
+
 function setupPwaInstall() {
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
@@ -95,7 +116,7 @@ async function registerServiceWorker() {
 }
 
 async function restoreSession() {
-  const { data: { session } } = await sb.auth.getSession();
+  const session = await refreshActiveSession();
   if (session) {
     state.session = session;
     await loadProfile();
@@ -197,7 +218,8 @@ async function onConvert(event) {
   formStatus.textContent = '';
   formStatus.className = 'form-status';
 
-  const accessToken = state.session?.access_token;
+  const refreshedSession = await refreshActiveSession();
+  const accessToken = refreshedSession?.access_token || state.session?.access_token;
   if (!accessToken) {
     formStatus.textContent = 'Geen geldige sessie. Log opnieuw in.';
     formStatus.classList.add('error');
