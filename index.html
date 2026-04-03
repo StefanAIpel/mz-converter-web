@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MZ Converter — Slingerland Techniek</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/app.css" />
+</head>
+<body>
+  <div class="auth-shell" id="auth-shell">
+    <div class="auth-card">
+      <img class="auth-logo" src="./assets/img/sll-logo-full.jpg" alt="Slingerland Techniek" />
+      <p class="eyebrow">Slingerland Techniek</p>
+      <h1>MZ Converter</h1>
+      <p class="subtitle">Interne offerteconversie van leverancier-Excel naar Slingerland output.</p>
+      <form id="login-form" class="auth-form">
+        <input id="email-input" class="auth-input" type="email" autocomplete="email" placeholder="E-mailadres" />
+        <input id="password-input" class="auth-input" type="password" autocomplete="current-password" placeholder="Wachtwoord" />
+        <button type="submit" class="primary-btn">Inloggen</button>
+        <p class="auth-error" id="auth-error"></p>
+      </form>
+      <button id="forgot-btn" class="text-btn" type="button">Wachtwoord vergeten?</button>
+      <p class="reset-msg" id="reset-msg"></p>
+    </div>
+  </div>
+
+  <div class="app-shell hidden" id="app-shell">
+    <header class="app-header">
+      <div class="brand-lockup">
+        <img class="brand-logo" src="./assets/img/sll-logo-full.jpg" alt="Slingerland Techniek" />
+        <div>
+          <p class="eyebrow">Internal Sales Tool</p>
+          <h2>MZ Converter</h2>
+          <p class="header-copy">Excel-first output. Download `.xlsx` en print lokaal naar PDF indien nodig.</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="user-pill" id="user-display"></div>
+        <button id="logout-btn" class="secondary-btn" type="button">Uitloggen</button>
+      </div>
+    </header>
+
+    <main class="page-grid">
+      <section class="panel form-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Nieuwe Conversie</p>
+            <h3>Upload en configureer</h3>
+          </div>
+          <div class="service-badge" id="service-badge">API controleren…</div>
+        </div>
+
+        <form id="convert-form" class="convert-form">
+          <section class="fieldset">
+            <h4>Bestand & Verkoper</h4>
+            <div class="grid two">
+              <label class="field file-drop">
+                <span>Leverancier Excel</span>
+                <input id="mz-file" name="mz_file" type="file" accept=".xlsx" required />
+                <strong id="file-name">Selecteer `.xlsx` bestand</strong>
+                <small>Alleen Excel-input van leverancier</small>
+              </label>
+              <div class="grid stack">
+                <label class="field">
+                  <span>Verkoper</span>
+                  <input name="verkoper_naam" placeholder="Steven Zweegers" required />
+                </label>
+                <label class="field">
+                  <span>Offertenummer</span>
+                  <input name="sll_ref" placeholder="SLL-2026-001" />
+                </label>
+              </div>
+            </div>
+            <div class="grid three">
+              <label class="field">
+                <span>Korting %</span>
+                <input name="klant_korting" type="number" min="0" max="80" step="0.5" value="0" required />
+              </label>
+              <label class="field">
+                <span>Transport opslag %</span>
+                <input name="transport_opslag" type="number" min="0" max="50" step="0.5" value="10" required />
+              </label>
+              <label class="field">
+                <span>Taal</span>
+                <select name="lang">
+                  <option value="nl">Nederlands</option>
+                  <option value="en">English</option>
+                  <option value="fr">Français</option>
+                  <option value="de">Deutsch</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <section class="fieldset">
+            <h4>Klant</h4>
+            <div class="grid three">
+              <label class="field">
+                <span>Klantnaam</span>
+                <input name="klant_naam" placeholder="Unikon BV" required />
+              </label>
+              <label class="field">
+                <span>Contactpersoon</span>
+                <input name="klant_contact" placeholder="Henk Boogaard" />
+              </label>
+              <label class="field">
+                <span>Projectnaam</span>
+                <input name="project_naam" placeholder="Ventilatie hal 3" />
+              </label>
+            </div>
+            <div class="grid three">
+              <label class="field">
+                <span>Straat + nr</span>
+                <input name="klant_straat" placeholder="Industrieweg 10" />
+              </label>
+              <label class="field">
+                <span>Postcode + plaats</span>
+                <input name="klant_postcode" placeholder="1234 AB Amsterdam" />
+              </label>
+              <label class="field">
+                <span>Land</span>
+                <input name="klant_land" placeholder="Nederland" />
+              </label>
+            </div>
+            <div class="grid two">
+              <label class="field">
+                <span>Klantreferentie</span>
+                <input name="klant_referentie" placeholder="REF-001" />
+              </label>
+              <label class="field">
+                <span>Betaalconditie</span>
+                <input name="betaalconditie" placeholder="30 dagen" />
+              </label>
+            </div>
+            <div class="grid two">
+              <label class="field">
+                <span>E-mail</span>
+                <input name="klant_email" placeholder="klant@bedrijf.nl" />
+              </label>
+              <label class="field">
+                <span>Telefoon</span>
+                <input name="klant_tel" placeholder="+31 6 12345678" />
+              </label>
+            </div>
+          </section>
+
+          <section class="fieldset">
+            <h4>Levering</h4>
+            <div class="grid two">
+              <label class="field">
+                <span>Levertijd</span>
+                <input name="levertijd" placeholder="4-6 weken" />
+              </label>
+              <label class="field">
+                <span>Opmerking</span>
+                <input name="opmerking" placeholder="Interne opmerking of klanttekst" />
+              </label>
+            </div>
+            <label class="checkbox-row">
+              <input type="checkbox" name="aflever_zelfde" value="1" checked />
+              <span>Afleveradres gelijk aan factuuradres</span>
+            </label>
+            <label class="field" id="aflever-field">
+              <span>Afleveradres</span>
+              <input name="afleveradres" placeholder="Industrieweg 10, 1234 AB Amsterdam" />
+            </label>
+          </section>
+
+          <div class="actions">
+            <button type="submit" class="primary-btn large" id="submit-btn">Converteer naar Excel</button>
+            <p class="form-status" id="form-status"></p>
+          </div>
+        </form>
+      </section>
+
+      <aside class="panel side-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Werkwijze</p>
+            <h3>Excel-first</h3>
+          </div>
+        </div>
+
+        <div class="info-block">
+          <h4>Output</h4>
+          <p>De backend genereert alleen een Slingerland `.xlsx`. Voor een PDF open je het bestand lokaal in Excel en kies je printen of opslaan als PDF.</p>
+        </div>
+
+        <div class="info-block">
+          <h4>Prijslogica</h4>
+          <p>MZ bruto × 0,45 × transportopslag × bruto factor. De converter past de Slingerland-layout en totalen automatisch toe.</p>
+        </div>
+
+        <div class="info-block">
+          <h4>Backend</h4>
+          <p id="api-url">Render API: controleren…</p>
+        </div>
+
+        <div class="download-card hidden" id="download-card">
+          <p class="eyebrow">Gereed</p>
+          <h4>Excel download</h4>
+          <p id="download-name">Bestand gereed</p>
+          <button class="primary-btn" id="download-btn" type="button">Download opnieuw</button>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./assets/js/app.js"></script>
+</body>
+</html>
