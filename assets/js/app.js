@@ -116,7 +116,26 @@ async function registerServiceWorker() {
 }
 
 async function restoreSession() {
-  const session = await refreshActiveSession();
+  // SSO: check ?auth_token= van Hub
+  const params = new URLSearchParams(location.search);
+  const urlToken = params.get('auth_token');
+  if (urlToken) {
+    try {
+      const { data, error } = await sb.auth.setSession({
+        access_token: urlToken,
+        refresh_token: urlToken,
+      });
+      if (!error && data.session) {
+        state.session = data.session;
+      }
+    } catch (_) { /* ignore, fall through to normal session check */ }
+    // Strip token uit URL
+    params.delete('auth_token');
+    const clean = params.toString();
+    history.replaceState(null, '', location.pathname + (clean ? '?' + clean : '') + location.hash);
+  }
+
+  const session = state.session || await refreshActiveSession();
   if (session) {
     state.session = session;
     await loadProfile();
