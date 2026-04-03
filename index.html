@@ -13,236 +13,247 @@
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./assets/css/app.css" />
 </head>
 <body>
-
-  <!-- ═══ AUTH ═══ -->
   <div class="auth-shell" id="auth-shell">
     <div class="auth-card">
       <div class="auth-brand">
-        <img class="auth-logo" src="./assets/img/mz-app-logo-96.png" alt="MZ Converter" />
+        <img class="auth-app-logo" src="./assets/img/mz-app-logo-96.png" alt="MZ Converter" />
         <div>
           <p class="eyebrow">Slingerland Techniek</p>
           <h1>MZ Converter</h1>
         </div>
       </div>
-      <p class="auth-sub">Interne offerteconversie van leverancier-Excel naar Slingerland output.</p>
+      <p class="subtitle">Interne offerteconversie van leverancier-Excel naar Slingerland output.</p>
       <form id="login-form" class="auth-form">
         <input id="email-input" class="auth-input" type="email" autocomplete="email" placeholder="E-mailadres" />
         <input id="password-input" class="auth-input" type="password" autocomplete="current-password" placeholder="Wachtwoord" />
-        <button type="submit" class="btn-primary">Inloggen</button>
+        <button type="submit" class="primary-btn">Inloggen</button>
         <p class="auth-error" id="auth-error"></p>
       </form>
-      <button id="forgot-btn" class="btn-text" type="button">Wachtwoord vergeten?</button>
+      <button id="forgot-btn" class="text-btn" type="button">Wachtwoord vergeten?</button>
       <p class="reset-msg" id="reset-msg"></p>
     </div>
   </div>
 
-  <!-- ═══ APP ═══ -->
   <div class="app-shell hidden" id="app-shell">
-
-    <!-- HEADER -->
-    <header class="header">
-      <div class="header-inner">
-        <div class="header-brand">
-          <div class="header-logo-wrap">
-            <img src="./assets/img/mz-app-logo-96.png" alt="MZ Converter" />
-          </div>
-          <div>
-            <p class="eyebrow">Internal Sales Tool</p>
-            <h1 class="header-title">MZ Converter</h1>
-          </div>
+    <header class="app-header">
+      <div class="brand-lockup">
+        <div class="brand-logo-wrap">
+          <img class="brand-logo" src="./assets/img/mz-app-logo-96.png" alt="MZ Converter" />
         </div>
-        <div class="header-right">
-          <div class="service-badge" id="service-badge">API controleren…</div>
-          <div class="user-pill" id="user-display"></div>
-          <a class="btn-hub" href="https://sll-hub.vercel.app">
-            <img src="./assets/img/hub-return-72.png" alt="" />
-            Hub
-          </a>
-          <button id="install-btn" class="btn-ghost hidden" type="button">Installeer</button>
-          <button id="logout-btn" class="btn-ghost" type="button">Uit</button>
+        <div class="brand-copy">
+          <p class="eyebrow">Internal Sales Tool</p>
+          <h2>MZ Converter</h2>
         </div>
+      </div>
+      <div class="header-actions">
+        <a class="hub-link" href="https://sll-hub.vercel.app">
+          <img src="./assets/img/hub-return-72.png" alt="" />
+          <span>Terug naar Hub</span>
+        </a>
+        <div class="service-badge" id="service-badge">API controleren…</div>
+        <div class="user-pill" id="user-display"></div>
+        <button id="install-btn" class="secondary-btn hidden" type="button">Installeer app</button>
+        <button id="logout-btn" class="secondary-btn" type="button">Uitloggen</button>
       </div>
     </header>
 
-    <!-- CONTENT -->
-    <div class="content">
-      <form id="convert-form" class="form-card">
-
-        <!-- ── Bronbestand ── -->
-        <section class="section">
-          <h2 class="section-title">Bronbestand</h2>
-          <div class="row">
-            <label class="field file-drop span-full">
-              <span>Leverancier Excel (.xlsx)</span>
-              <input id="mz-file" name="mz_file" type="file" accept=".xlsx" required />
-              <strong id="file-name">Sleep bestand of klik om te selecteren</strong>
-            </label>
+    <main class="page-grid">
+      <section class="panel form-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Nieuwe Conversie</p>
+            <h3>Upload en configureer</h3>
+            <p class="panel-copy">Kies leverancierbestand, vul kerngegevens in en download direct de Slingerland Excel.</p>
           </div>
-        </section>
-
-        <!-- ── Ordergegevens ── -->
-        <section class="section">
-          <h2 class="section-title">Ordergegevens</h2>
-          <div class="row cols-3">
-            <label class="field">
-              <span>Verkoper</span>
-              <select name="verkoper_naam" required>
-                <option value="Steven Zweegers">Steven Zweegers</option>
-                <option value="Roel Slingerland">Roel Slingerland</option>
-                <option value="Wim de Jong">Wim de Jong</option>
-              </select>
-            </label>
-            <label class="field">
-              <span>Offertenummer</span>
-              <input name="sll_ref" placeholder="SLL-2026-001" />
-            </label>
-            <label class="field">
-              <span>Taal</span>
-              <select name="lang">
-                <option value="nl">Nederlands</option>
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-                <option value="de">Deutsch</option>
-              </select>
-            </label>
-          </div>
-          <div class="row cols-3">
-            <label class="field">
-              <span>Korting %</span>
-              <input name="klant_korting" type="number" min="0" max="80" step="0.5" value="0" required />
-            </label>
-            <label class="field">
-              <span>Transport %</span>
-              <input name="transport_opslag" type="number" min="0" max="50" step="0.5" value="10" required />
-            </label>
-            <label class="field">
-              <span>Klantreferentie</span>
-              <input name="klant_referentie" placeholder="REF-001" />
-            </label>
-          </div>
-        </section>
-
-        <!-- ── Klantgegevens ── -->
-        <section class="section">
-          <h2 class="section-title">Klantgegevens</h2>
-          <div class="row cols-2">
-            <label class="field">
-              <span>Bedrijfsnaam</span>
-              <input name="klant_naam" placeholder="Unikon BV" required />
-            </label>
-            <label class="field">
-              <span>Projectnaam</span>
-              <input name="project_naam" placeholder="Ventilatie hal 3" />
-            </label>
-          </div>
-          <div class="row cols-3">
-            <label class="field">
-              <span>Straat + nr</span>
-              <input name="klant_straat" placeholder="Industrieweg 10" />
-            </label>
-            <label class="field">
-              <span>Postcode + plaats</span>
-              <input name="klant_postcode" placeholder="1234 AB Amsterdam" />
-            </label>
-            <label class="field">
-              <span>Land</span>
-              <select name="klant_land">
-                <option value="Nederland">Nederland</option>
-                <option value="België">België</option>
-                <option value="Duitsland">Duitsland</option>
-                <option value="Frankrijk">Frankrijk</option>
-                <option value="Luxemburg">Luxemburg</option>
-                <option value="Overig">Overig</option>
-              </select>
-            </label>
-          </div>
-        </section>
-
-        <!-- ── Contactgegevens ── -->
-        <section class="section">
-          <h2 class="section-title">Contactgegevens</h2>
-          <div class="row cols-3">
-            <label class="field">
-              <span>Contactpersoon</span>
-              <input name="klant_contact" placeholder="Henk Boogaard" />
-            </label>
-            <label class="field">
-              <span>E-mail</span>
-              <input name="klant_email" type="email" placeholder="klant@bedrijf.nl" />
-            </label>
-            <label class="field">
-              <span>Telefoon</span>
-              <input name="klant_tel" placeholder="+31 6 12345678" />
-            </label>
-          </div>
-        </section>
-
-        <!-- ── Condities ── -->
-        <section class="section">
-          <h2 class="section-title">Condities</h2>
-          <div class="row cols-2">
-            <label class="field">
-              <span>Levertijd</span>
-              <input name="levertijd" value="4-6 weken" />
-            </label>
-            <label class="field">
-              <span>Betaalconditie</span>
-              <input name="betaalconditie" value="30 dagen netto" />
-            </label>
-          </div>
-          <label class="checkbox-row">
-            <input type="checkbox" name="aflever_zelfde" value="1" checked />
-            <span>Afleveradres gelijk aan factuuradres</span>
-          </label>
-          <label class="field hidden" id="aflever-field">
-            <span>Afwijkend afleveradres</span>
-            <input name="afleveradres" placeholder="Adres" />
-          </label>
-        </section>
-
-        <!-- ── Opmerkingen ── -->
-        <section class="section">
-          <h2 class="section-title">Opmerkingen</h2>
-          <div class="row cols-2">
-            <label class="field">
-              <span>Offerte-opmerking kort</span>
-              <input name="opmerking_kort" placeholder="Projectfase of interne tag" />
-            </label>
-            <label class="field">
-              <span>Klanttekst / opmerking</span>
-              <textarea name="opmerking" rows="2" placeholder="Leverafspraak, notitie of tekst voor de klant"></textarea>
-            </label>
-          </div>
-        </section>
-
-        <!-- ── CTA ── -->
-        <div class="cta-bar">
-          <button type="submit" class="btn-primary btn-large" id="submit-btn">Converteer naar Excel</button>
-          <p class="form-status" id="form-status"></p>
         </div>
 
-      </form>
+        <form id="convert-form" class="convert-form">
+          <section class="fieldset">
+            <div class="section-head">
+              <div>
+                <h4>Bron & Verkoper</h4>
+                <p>Upload het leverancierbestand en leg de basis van de offerte vast.</p>
+              </div>
+            </div>
+            <div class="grid two">
+              <label class="field file-drop">
+                <span>Leverancier Excel</span>
+                <input id="mz-file" name="mz_file" type="file" accept=".xlsx" required />
+                <strong id="file-name">Selecteer `.xlsx` bestand</strong>
+                <small>Alleen Excel-input van leverancier</small>
+              </label>
+              <div class="grid stack compact-stack">
+                <label class="field">
+                  <span>Verkoper</span>
+                  <input name="verkoper_naam" placeholder="Steven Zweegers" required />
+                </label>
+                <label class="field">
+                  <span>Offertenummer</span>
+                  <input name="sll_ref" placeholder="SLL-2026-001" />
+                </label>
+                <div class="grid three compact-grid">
+                  <label class="field">
+                    <span>Korting %</span>
+                    <input name="klant_korting" type="number" min="0" max="80" step="0.5" value="0" required />
+                  </label>
+                  <label class="field">
+                    <span>Transport %</span>
+                    <input name="transport_opslag" type="number" min="0" max="50" step="0.5" value="10" required />
+                  </label>
+                  <label class="field">
+                    <span>Taal</span>
+                    <select name="lang">
+                      <option value="nl">Nederlands</option>
+                      <option value="en">English</option>
+                      <option value="fr">Français</option>
+                      <option value="de">Deutsch</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </section>
 
-      <!-- ── Sidebar ── -->
-      <aside class="sidebar">
-        <div class="sidebar-card">
-          <p class="eyebrow">Info</p>
-          <div class="info-row"><strong>Output</strong><span>Excel-download</span></div>
-          <div class="info-row"><strong>Prijslogica</strong><span>MZ bruto × 0.45 × transport × factor</span></div>
-          <div class="info-row"><strong>Backend</strong><span id="api-url">Render API</span></div>
+          <section class="fieldset">
+            <div class="section-head">
+              <div>
+                <h4>Klantgegevens</h4>
+                <p>Contact-, project- en adresgegevens voor de offerte en het voorblad.</p>
+              </div>
+            </div>
+            <div class="grid three">
+              <label class="field">
+                <span>Klantnaam</span>
+                <input name="klant_naam" placeholder="Unikon BV" required />
+              </label>
+              <label class="field">
+                <span>Contactpersoon</span>
+                <input name="klant_contact" placeholder="Henk Boogaard" />
+              </label>
+              <label class="field">
+                <span>Projectnaam</span>
+                <input name="project_naam" placeholder="Ventilatie hal 3" />
+              </label>
+            </div>
+            <div class="grid three">
+              <label class="field">
+                <span>Straat + nr</span>
+                <input name="klant_straat" placeholder="Industrieweg 10" />
+              </label>
+              <label class="field">
+                <span>Postcode + plaats</span>
+                <input name="klant_postcode" placeholder="1234 AB Amsterdam" />
+              </label>
+              <label class="field">
+                <span>Land</span>
+                <input name="klant_land" placeholder="Nederland" />
+              </label>
+            </div>
+            <div class="grid two">
+              <label class="field">
+                <span>E-mail</span>
+                <input name="klant_email" placeholder="klant@bedrijf.nl" />
+              </label>
+              <label class="field">
+                <span>Telefoon</span>
+                <input name="klant_tel" placeholder="+31 6 12345678" />
+              </label>
+            </div>
+          </section>
+
+          <section class="fieldset">
+            <div class="section-head">
+              <div>
+                <h4>Condities</h4>
+                <p>Levering, betaling en vrije tekst voor klanttekst of interne opmerkingen.</p>
+              </div>
+            </div>
+            <div class="grid two compact-grid">
+              <label class="field">
+                <span>Levertijd</span>
+                <input name="levertijd" placeholder="4-6 weken" />
+              </label>
+              <label class="field">
+                <span>Betaalconditie</span>
+                <input name="betaalconditie" placeholder="30 dagen" />
+              </label>
+            </div>
+            <div class="grid two compact-grid">
+              <label class="field">
+                <span>Klantreferentie</span>
+                <input name="klant_referentie" placeholder="REF-001" />
+              </label>
+              <label class="field">
+                <span>Offerte-opmerking kort</span>
+                <input name="opmerking_kort" placeholder="Bijv. projectfase of interne tag" />
+              </label>
+            </div>
+            <label class="checkbox-row">
+              <input type="checkbox" name="aflever_zelfde" value="1" checked />
+              <span>Afleveradres gelijk aan factuuradres</span>
+            </label>
+            <div class="grid two compact-grid notes-grid">
+              <label class="field field-wide">
+                <span>Klanttekst / opmerking</span>
+                <textarea name="opmerking" rows="4" placeholder="Bijvoorbeeld leverafspraak, interne notitie of tekst voor de klant."></textarea>
+              </label>
+              <div class="condition-note">
+                <strong>Gebruik</strong>
+                <p>Deze sectie is bewust compact gehouden zodat er later extra condities, referenties of verkoopvelden bij kunnen zonder dat de pagina onrustig wordt.</p>
+              </div>
+            </div>
+            <label class="field hidden" id="aflever-field">
+              <span>Afleveradres afwijkend</span>
+              <input name="afleveradres" placeholder="Afwijkend afleveradres" />
+            </label>
+          </section>
+
+          <div class="actions">
+            <button type="submit" class="primary-btn large" id="submit-btn">Converteer naar Excel</button>
+            <p class="form-status" id="form-status"></p>
+          </div>
+        </form>
+      </section>
+
+      <aside class="panel side-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Snelle Info</p>
+            <h3>Klaar voor mobiel</h3>
+          </div>
         </div>
+
+        <div class="info-strip">
+          <div class="info-chip">
+            <strong>Output</strong>
+            <span>Excel-download, lokaal naar PDF printen indien nodig.</span>
+          </div>
+          <div class="info-chip">
+            <strong>Prijslogica</strong>
+            <span>MZ bruto × 0,45 × transportopslag × bruto factor.</span>
+          </div>
+          <div class="info-chip">
+            <strong>Backend</strong>
+            <span id="api-url">Render API: controleren…</span>
+          </div>
+          <div class="info-chip">
+            <strong>PWA</strong>
+            <span>Open op mobiel of installeer als desktop-app.</span>
+          </div>
+        </div>
+
         <div class="download-card hidden" id="download-card">
           <p class="eyebrow">Gereed</p>
           <h4>Excel download</h4>
           <p id="download-name">Bestand gereed</p>
-          <button class="btn-primary" id="download-btn" type="button">Download opnieuw</button>
+          <button class="primary-btn" id="download-btn" type="button">Download opnieuw</button>
         </div>
       </aside>
-    </div>
+    </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
