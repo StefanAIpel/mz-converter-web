@@ -405,7 +405,7 @@ a {
 
 .grid {
   display: grid;
-  gap: 12px;
+  gap: 16px;
 }
 
 .grid.two {
