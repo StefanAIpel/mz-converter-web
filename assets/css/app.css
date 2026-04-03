@@ -401,6 +401,14 @@ a {
   margin-top: 4px;
 }
 
+/* Losse elementen na een grid in een fieldset: zelfde ritme */
+.fieldset > .grid + .checkbox-row,
+.fieldset > .checkbox-row + .grid,
+.fieldset > .checkbox-row + .field,
+.fieldset > .grid + .field {
+  margin-top: 16px;
+}
+
 .section-head p {
   margin: 0;
   color: var(--muted);
